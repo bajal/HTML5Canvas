@@ -1,0 +1,97 @@
+<html>
+<style>* { padding: 0; margin: 0; } 
+    canvas { 
+        background: white; 
+        border: 1px solid black;
+        display: block; 
+        margin: 0 auto; 
+    }
+</style>
+<body>
+    <br>
+<center>
+    <h3><i>Canvas Test</i></h3>
+	<canvas id="myCanvas" width="480" height="320"></canvas>
+</center>
+<script>
+var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    var x = canvas.width/2;
+    var y = canvas.height-30;
+    var ballRadius = 10;
+    
+    var px = canvas.width/2;
+    var py = canvas.height-30;
+    var pdx = 5;
+    var pdy = -5;
+    
+    
+    var dx = 0.5;
+    var dy = -0.5;
+    
+    function keyDownHandler(e) {
+        if(e.keyCode == 37) { //Left
+            px -= pdx;            
+        } else if(e.keyCode == 39) { //Right
+            px += pdx;            
+        } else if(e.keyCode == 38) { //Up
+            py += pdy;            
+        } else if(e.keyCode == 40) { //Down
+            py -= pdy;            
+        }
+        draw();
+    }
+    
+    function collisionDetection(){
+        if(px == x  && py == y)
+            alert('game over')
+        
+    }
+    
+    function drawTortoise() {
+        var imageObj = new Image();
+        imageObj.src = 'tortoise-16.png';
+        ctx.drawImage(imageObj, px, py);
+    }
+    
+    function drawBalls() {
+        ctx.beginPath();
+        ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        
+        ctx.arc(x-100, y-30, ballRadius, 0, Math.PI*2);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        
+        ctx.closePath();
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawTortoise();
+        drawBalls();
+        collisionDetection();
+        
+        if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+            dx = -dx;
+        }
+        if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+            dy = -dy;
+        }
+        
+        x += dx;
+        y += dy;
+        
+    }
+    
+    setInterval(draw, 10);
+    document.addEventListener("keydown", keyDownHandler, false);
+    window.onload = draw;
+    //document.addEventListener("keyup", keyUpHandler, false);
+</script>
+
+</body>
+
+
+</html>
